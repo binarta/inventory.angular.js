@@ -1,5 +1,6 @@
 angular.module('inventory', ['rest.client', 'angular.usecase.adapter', 'config', 'i18n'])
-    .controller('SubscribeForQuantityIncrementNotificationsController', ['$scope', 'config', 'localeResolver', 'usecaseAdapterFactory', 'restServiceHandler', SubscribeForQuantityIncrementNotificationsController]);
+    .controller('SubscribeForQuantityIncrementNotificationsController', ['$scope', 'config', 'localeResolver', 'usecaseAdapterFactory', 'restServiceHandler', SubscribeForQuantityIncrementNotificationsController])
+    .controller('InventoryController', ['$scope', InventoryController]);
 
 function SubscribeForQuantityIncrementNotificationsController($scope, config, localeResolver, usecaseAdapterFactory, restServiceHandler) {
     var self = this;
@@ -19,5 +20,19 @@ function SubscribeForQuantityIncrementNotificationsController($scope, config, lo
             }
         };
         restServiceHandler(ctx);
+    };
+}
+
+function InventoryController($scope) {
+    $scope.negativeQuantity = function (item) {
+        item.quantity = -Math.abs(item.quantity);
+    };
+
+    $scope.positiveQuantity = function (item) {
+        item.quantity = Math.abs(item.quantity);
+    };
+
+    $scope.resetQuantity = function (item) {
+        item.quantity = 0;
     };
 }

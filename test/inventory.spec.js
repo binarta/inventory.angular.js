@@ -33,4 +33,50 @@ describe('inventory', function() {
             expect(request().params.withCredentials).toBeTruthy();
         });
     });
+
+    describe('InventoryController', function () {
+        var item;
+
+        beforeEach(inject(function ($controller, $rootScope) {
+            scope = $rootScope.$new();
+            ctrl = $controller(InventoryController, {
+                $scope: scope
+            });
+            item = {
+                id: 'item-id',
+                quantity: 1
+            };
+        }));
+
+        describe('on make negative', function () {
+            beforeEach(function () {
+                scope.negativeQuantity(item);
+            });
+
+            it('quantity should be a negative value', function () {
+                expect(item.quantity).toEqual(-1);
+            });
+        });
+
+        describe('on make positive', function () {
+            beforeEach(function () {
+                item.quantity = -1;
+                scope.positiveQuantity(item);
+            });
+
+            it('quantity should be a negative value', function () {
+                expect(item.quantity).toEqual(1);
+            });
+        });
+
+        describe('on reset quantity', function () {
+            beforeEach(function () {
+                scope.resetQuantity(item);
+            });
+
+            it('quantity should be a negative value', function () {
+                expect(item.quantity).toEqual(0);
+            });
+        });
+    });
 });
