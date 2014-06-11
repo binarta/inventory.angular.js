@@ -33,6 +33,6 @@ function InventoryController($scope) {
     };
 
     $scope.resetQuantity = function (item) {
-        item.quantity = 0;
+        item.quantity = 1;
     };
 }

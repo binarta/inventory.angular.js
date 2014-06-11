@@ -69,14 +69,10 @@ describe('inventory', function() {
             });
         });
 
-        describe('on reset quantity', function () {
-            beforeEach(function () {
-                scope.resetQuantity(item);
-            });
+        it('on reset quantity', function () {
+            scope.resetQuantity(item);
 
-            it('quantity should be a negative value', function () {
-                expect(item.quantity).toEqual(0);
-            });
+            expect(item.quantity).toEqual(1);
         });
     });
 });
