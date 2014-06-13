@@ -75,4 +75,46 @@ describe('inventory', function() {
             expect(item.quantity).toEqual(1);
         });
     });
+
+    describe('IsItemInStock', function() {
+        var success, error;
+        beforeEach(inject(function(isItemInStock) {
+            isItemInStock(scope, {id:'I', quantity:1}, function() {
+                success = true;
+            }, function() {
+                error = true;
+            });
+        }));
+
+        it('request gets sent', inject(function() {
+            expect(request().params).toEqual({
+                method:'POST',
+                url: 'http://host/inventory/in-stock',
+                data: {
+                    id:'I',
+                    quantity: 1
+                }
+            })
+        }));
+
+        describe('on success', function() {
+            beforeEach(function() {
+                request().success();
+            });
+
+            it('callback is fired', inject(function() {
+                expect(success).toBeTruthy();
+            }));
+        });
+
+        describe('on error', function() {
+            beforeEach(function() {
+                request().error();
+            });
+
+            it('callback is fired', inject(function() {
+                expect(error).toBeTruthy();
+            }));
+        });
+    });
 });

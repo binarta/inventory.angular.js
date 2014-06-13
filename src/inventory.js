@@ -1,6 +1,7 @@
 angular.module('inventory', ['rest.client', 'angular.usecase.adapter', 'config', 'i18n'])
     .controller('SubscribeForQuantityIncrementNotificationsController', ['$scope', 'config', 'localeResolver', 'usecaseAdapterFactory', 'restServiceHandler', SubscribeForQuantityIncrementNotificationsController])
-    .controller('InventoryController', ['$scope', InventoryController]);
+    .controller('InventoryController', ['$scope', InventoryController])
+    .factory('isItemInStock', ['usecaseAdapterFactory', 'restServiceHandler', 'config', IsItemInStockFactory]);
 
 function SubscribeForQuantityIncrementNotificationsController($scope, config, localeResolver, usecaseAdapterFactory, restServiceHandler) {
     var self = this;
@@ -35,4 +36,21 @@ function InventoryController($scope) {
     $scope.resetQuantity = function (item) {
         item.quantity = 1;
     };
+}
+
+function IsItemInStockFactory(usecaseAdapterFactory, restServiceHandler, config) {
+    return function(scope, args, success, error) {
+        var request = usecaseAdapterFactory(scope);
+        request.params = {
+            method:'POST',
+            url:config.baseUri + 'inventory/in-stock',
+            data: {
+                id:args.id,
+                quantity:args.quantity
+            }
+        };
+        request.success = success;
+        request.error = error;
+        restServiceHandler(request);
+    }
 }
