@@ -1,9 +1,9 @@
 angular.module('inventory', ['rest.client', 'angular.usecase.adapter', 'config', 'i18n'])
-    .controller('SubscribeForQuantityIncrementNotificationsController', ['$scope', 'config', 'localeResolver', 'usecaseAdapterFactory', 'restServiceHandler', SubscribeForQuantityIncrementNotificationsController])
+    .controller('SubscribeForQuantityIncrementNotificationsController', ['$scope', 'config', 'localeResolver', 'usecaseAdapterFactory', 'restServiceHandler', 'topicMessageDispatcher', SubscribeForQuantityIncrementNotificationsController])
     .controller('InventoryController', ['$scope', InventoryController])
     .factory('isItemInStock', ['usecaseAdapterFactory', 'restServiceHandler', 'config', IsItemInStockFactory]);
 
-function SubscribeForQuantityIncrementNotificationsController($scope, config, localeResolver, usecaseAdapterFactory, restServiceHandler) {
+function SubscribeForQuantityIncrementNotificationsController($scope, config, localeResolver, usecaseAdapterFactory, restServiceHandler, topicMessageDispatcher) {
     var self = this;
 
     $scope.init = function(it) {
@@ -19,6 +19,12 @@ function SubscribeForQuantityIncrementNotificationsController($scope, config, lo
             headers:{
                 'Accept-Language':localeResolver()
             }
+        };
+        ctx.success = function () {
+            topicMessageDispatcher.fire('system.success', {
+                msg: 'subscribe.quantity.increment.success.notification',
+                default: 'You will receive an e-mail when this item is available again.'
+            });
         };
         restServiceHandler(ctx);
     };
