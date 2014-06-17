@@ -107,7 +107,8 @@ describe('inventory', function () {
                 method: 'POST',
                 url: 'http://host/inventory/in-stock',
                 data: {
-                    id: 'I',
+                    reportType: 'complex',
+                    id:'I',
                     quantity: 1
                 }
             })
@@ -130,6 +131,38 @@ describe('inventory', function () {
 
             it('callback is fired', inject(function () {
                 expect(error).toBeTruthy();
+            }));
+        });
+    });
+
+    describe('InStockController', function() {
+        beforeEach(inject(function($controller) {
+            ctrl = $controller(InStockController, {$scope:scope});
+            scope.init({});
+        }));
+
+        describe('on success', function() {
+            beforeEach(function() {
+                request().success({stock:5});
+            });
+
+            it('stock gets exposed', inject(function() {
+                expect(scope.stock).toEqual(5);
+            }));
+        });
+
+        describe('on rejected', function() {
+            function rejectWith(args) {
+                request().reset();
+                request().rejected(args);
+                request().error();
+            }
+            beforeEach(function() {
+                rejectWith({quantity:[{label:'upperbound', params:{boundary:5}}]});
+            });
+
+            it('violation param boundary is exposed as stock', inject(function() {
+                expect(scope.stock).toEqual(5);
             }));
         });
     });
