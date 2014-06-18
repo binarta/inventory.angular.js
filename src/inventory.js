@@ -10,7 +10,7 @@ function SubscribeForQuantityIncrementNotificationsController($scope, config, lo
     $scope.init = function(it) {
         self.args = it;
     };
-    $scope.submit = function() {
+    $scope.submit = function(args) {
         var ctx = usecaseAdapterFactory($scope);
         ctx.params = {
             method:'PUT',
@@ -22,6 +22,7 @@ function SubscribeForQuantityIncrementNotificationsController($scope, config, lo
             }
         };
         ctx.success = function () {
+            if(args && args.success) args.success();
             topicMessageDispatcher.fire('system.success', {
                 msg: 'subscribe.quantity.increment.success.notification',
                 default: 'You will receive an e-mail when this item is available again.'

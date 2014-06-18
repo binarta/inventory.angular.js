@@ -23,30 +23,42 @@ describe('inventory', function () {
             };
         }));
 
-        describe('on submit', function () {
+        describe('initialized', function() {
             beforeEach(function () {
                 $scope.init({
                     payload: payload
                 });
-                $scope.submit();
             });
 
-            it('send subscription request', function () {
-                expect(request().params.method).toEqual('PUT');
-                expect(request().params.url).toEqual('http://host/api/quantity/increment/notification/subscriptions');
-                expect(request().params.data).toEqual(payload);
-                expect(request().params.headers['Accept-Language']).toEqual('en');
-                expect(request().params.withCredentials).toBeTruthy();
-            });
+            describe('on submit', function () {
+                beforeEach(function () {
+                    $scope.submit();
+                });
 
-            it('on success send notification', function () {
-                request().success();
+                it('send subscription request', function () {
+                    expect(request().params.method).toEqual('PUT');
+                    expect(request().params.url).toEqual('http://host/api/quantity/increment/notification/subscriptions');
+                    expect(request().params.data).toEqual(payload);
+                    expect(request().params.headers['Accept-Language']).toEqual('en');
+                    expect(request().params.withCredentials).toBeTruthy();
+                });
 
-                expect(dispatcher['system.success']).toEqual({
-                    msg: 'subscribe.quantity.increment.success.notification',
-                    default: 'You will receive an e-mail when this item is available again.'
+                it('on success send notification', function () {
+                    request().success();
+
+                    expect(dispatcher['system.success']).toEqual({
+                        msg: 'subscribe.quantity.increment.success.notification',
+                        default: 'You will receive an e-mail when this item is available again.'
+                    });
                 });
             });
+
+            it('on submit with on success handler', function() {
+                var executed = false;
+                $scope.submit({success:function() {executed = true}});
+                request().success();
+                expect(executed).toEqual(true);
+            })
         });
     });
 
