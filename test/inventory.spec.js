@@ -117,7 +117,7 @@ describe('inventory', function () {
         it('request gets sent', inject(function () {
             expect(request().params).toEqual({
                 method: 'POST',
-                url: 'http://host/inventory/in-stock',
+                url: 'http://host/api/inventory/in-stock',
                 data: {
                     reportType: 'complex',
                     id:'I',

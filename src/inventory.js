@@ -51,7 +51,7 @@ function IsItemInStockFactory(usecaseAdapterFactory, restServiceHandler, config)
         var request = usecaseAdapterFactory(scope, success, null, 'complex');
         request.params = {
             method:'POST',
-            url:config.baseUri + 'inventory/in-stock',
+            url:config.baseUri + 'api/inventory/in-stock',
             data: {
                 reportType: 'complex',
                 id:args.id,
